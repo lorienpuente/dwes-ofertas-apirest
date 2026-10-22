@@ -78,15 +78,9 @@
         }
     }
 
-        $tipo = $_GET['tipo'] ?? '';
-        $buscar = $_GET['buscar'] ?? '';
+        
         foreach ($platos as $plato) {
-            if (
-                ($buscar == '' && $tipo == '') ||
-                ($tipo != '' && $plato->tipo == $tipo && $buscar == '') ||
-                ($tipo == '' && $buscar != '' && in_array($buscar, $plato->ingredientes)) ||
-                ($tipo != '' && $plato->tipo == $tipo && $buscar != '' && in_array($buscar, $plato->ingredientes))
-                ) {
+            
                 echo '<li>';
                 echo '<p>' . $plato->nombre . '</p>';
                 echo '<p>' . $plato->precio . " €" . '</p>';
@@ -104,8 +98,8 @@
                 echo '<button type="submit">Editar</button>';
                 echo '</form>';
                 echo '</li>';
-            }
         }
+        
         ?>
     </ul>
 </body>
