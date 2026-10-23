@@ -12,7 +12,7 @@
 </head>
 <body>
     <h2>Nueva prenda</h2>
-    <form action="prendas.php" method="post">
+    <form action="guardar.php" method="post">
         <label for="marca">Marca:</label>
         <input type="text" name="marca" id="marca" required> <br>
         <label for="tipo">Tipo de prenda:</label>
