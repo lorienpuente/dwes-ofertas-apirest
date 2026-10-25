@@ -17,8 +17,6 @@ Repositorio con las actividades de PHP y bases de datos.
 
 ## ⚽ BBDD Fútbol
 
-- [PaginaFutbol.html](bbdd%20futbol/PaginaFutbol.html)
-- [bd.php](bbdd%20futbol/bd.php)
 - [borrar.php](bbdd%20futbol/borrar.php)
 - [editar.php](bbdd%20futbol/editar.php)
 - [formulario.php](bbdd%20futbol/formulario.php)
