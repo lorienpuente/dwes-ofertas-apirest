@@ -19,8 +19,7 @@ Repositorio con las actividades de PHP y bases de datos.
 
 - [Borrar](bbdd%20futbol/borrar.php)
 - [Buscar para editar de una tabla](bbdd%20futbol/editar.php)
-- [formulario.php](bbdd%20futbol/formulario.php)
-- [guardar.php](bbdd%20futbol/guardar.php)
+- [Insertar en una sola tabla](bbdd%20futbol/guardar.php)
 - [index.php](bbdd%20futbol/index.php)
 - [jugador.php](bbdd%20futbol/jugador.php)
 - [nav.php](bbdd%20futbol/nav.php)
