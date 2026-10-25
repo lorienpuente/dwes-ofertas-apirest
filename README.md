@@ -8,7 +8,7 @@ Repositorio con las actividades de PHP y bases de datos.
 - [Borrar](actividad%201/borrar.php)
 - [Coger datos de varias tablas para editar](actividad%201/editar.php)
 - [Insertar en varias tablas](actividad%201/guardar.php)
-- [index.php](actividad%201/index.php)
+- [Indice y mostrar datos](actividad%201/index.php)
 - [nav.php](actividad%201/nav.php)
 - [nuevo.php](actividad%201/nuevo.php)
 - [plato.php](actividad%201/plato.php)
