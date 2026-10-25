@@ -7,7 +7,7 @@ Repositorio con las actividades de PHP y bases de datos.
 - [Conexion Base de Datos](actividad%201/bd.php)
 - [Borrar](actividad%201/borrar.php)
 - [Coger datos de varias tablas para editar](actividad%201/editar.php)
-- [Insertar en varias tablas](actividad%201/guardar.php)
+- [Añadir objetos e insertar en varias tablas](actividad%201/guardar.php)
 - [Indice y mostrar datos](actividad%201/index.php)
 - [Barra navegacion](actividad%201/nav.php)
 - [Formulario para añadir](actividad%201/nuevo.php)
