@@ -22,7 +22,7 @@ Repositorio con las actividades de PHP y bases de datos.
 - [Insertar en una sola tabla](bbdd%20futbol/guardar.php)
 - [Indice y mostrar datos](bbdd%20futbol/index.php)
 - [jugador.php](bbdd%20futbol/jugador.php)
-- [nuevo.php](bbdd%20futbol/nuevo.php)
+- [Formulario para añadir](bbdd%20futbol/nuevo.php)
 - [update.php](bbdd%20futbol/update.php)
 
 ## 👕 Examen anterior
