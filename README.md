@@ -12,7 +12,7 @@ Repositorio con las actividades de PHP y bases de datos.
 - [Barra navegacion](actividad%201/nav.php)
 - [Formulario para añadir](actividad%201/nuevo.php)
 - [plato.php](actividad%201/plato.php)
-- [update.php](actividad%201/update.php)
+- [Editar de varias tablas](actividad%201/update.php)
 - [ver.php](actividad%201/ver.php)
 
 ## ⚽ BBDD Fútbol
