@@ -15,20 +15,26 @@
         <tr>
             <th>Marca</th>
             <th>Tipo de prenda</th>
+            <th>N. ejemplares</th>
         </tr>
         <?php
             include 'bd.php';
-            $sql = "SELECT marca, tipoPrenda FROM prendas";
+            $sql = "SELECT p.marca, p.tipoPrenda, COUNT(e.prenda) AS cantidad_tipos
+                    FROM prendas p
+                    LEFT JOIN ejemplares e ON p.marca = e.prenda
+                    GROUP BY p.marca, p.tipoPrenda";
             $resultado = $conector->query($sql);
             $prendas = $resultado->fetchAll(PDO::FETCH_ASSOC);
             foreach ($prendas as $prenda) {
                 echo "<tr>";
                 echo "<td>" . $prenda['marca'] . "</td>";
                 echo "<td>" . $prenda['tipoPrenda'] . "</td>";
+                echo "<td>" . $prenda['cantidad_tipos'] . "</td>";
                 echo "</tr>";
             }
         ?>
     </table>
+    
 
 </body>
 </html>
