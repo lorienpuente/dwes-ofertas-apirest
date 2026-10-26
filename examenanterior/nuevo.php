@@ -1,4 +1,5 @@
  <?php
+    include 'bd.php';
     include 'nav.php';
     include 'tipoprenda.php';
     include 'ejemplar.php';
@@ -18,13 +19,13 @@
 </head>
 <body>
    <h3>Nuevo ejemplar</h3>
-   <form action="añadir.php" method="post">
+   <form action="añadir.php" method="POST">
     <Label for="tipo">Tipo de prenda:</label>
     <select name="tipo" id="tipo" required>
             <?php
                 
-                foreach (tipoPrenda::cases() as $prenda) {
-                echo "<option value='" . $prenda->value . "'>" . $prenda->value . '-' . $prenda->name . "</option>";
+                foreach ($prendas as $prenda) {
+                echo "<option value='" . $prenda['marca'] . "'>" . $prenda['marca'] . ' - ' . $prenda['tipoPrenda'] . "</option>";
 }
             ?>
         </select><br>
