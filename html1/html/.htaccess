@@ -1,0 +1,47 @@
+# ----------------------------------------------------------------------
+# ENRUTAMIENTO DE URLs (Friendly URLs / Front Controller)
+# ----------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Ajusta esta ruta si tu proyecto está en una subcarpeta (ej: RewriteBase /mi-proyecto/)
+    RewriteBase /
+
+    # La API tiene sus propias reglas de rutas definidas en html/api/.htaccess.
+    RewriteRule ^api(?:/|$) - [L]
+
+    # El resto de rutas inexistentes se entrega al front controller general del proyecto.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+# ----------------------------------------------------------------------
+# CONFIGURACIÓN PHP PARA ENTORNOS DE DESARROLLO
+# ----------------------------------------------------------------------
+<IfModule mod_php.c>
+    # Muestra todos los errores, avisos y warnings en pantalla
+    php_flag display_errors On
+    php_flag display_startup_errors On
+    php_value error_reporting -1
+
+    # Ampliación de límites para pruebas locales
+    php_value memory_limit 256M
+    php_value upload_max_filesize 64M
+    php_value post_max_size 64M
+    php_value max_execution_time 300
+</IfModule>
+
+# ----------------------------------------------------------------------
+# AJUSTES GENERALES Y SEGURIDAD
+# ----------------------------------------------------------------------
+# Forzar codificación UTF-8
+AddDefaultCharset UTF-8
+
+# Desactivar el listado visual de carpetas si no hay un index
+Options -Indexes
+
+# Bloquear acceso web a archivos sensibles (.env, .git, .sql, etc.)
+<FilesMatch "^\.|\.(env|log|git|sh|sql|json|lock)$">
+    Require all denied
+</FilesMatch>
