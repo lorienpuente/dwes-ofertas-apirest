@@ -9,5 +9,5 @@ $descripcion = $_POST['descripcion'];
 $tarea = new Tarea(null,$titulo, $descripcion);
 $nuevo = $dao->crear($tarea);
 
-
+header("Location: index.php");
 ?>

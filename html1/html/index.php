@@ -19,14 +19,15 @@ foreach ($tareas as $tarea) {
                 echo '<p>' . $tarea->titulo . '</p>';
                 echo '<p>' . $tarea->descripcion . '</p>';
                 echo '<form action="borrar.php" method="POST">';
-                echo '<input type="hidden" name="nombre" value="' . $tarea->id . '">';
+                echo '<input type="hidden" name="id" value="' . $tarea->id . '">';
                 echo '<button type="submit">Borrar</button>';
                 echo '</form>';
                 echo '<form action="editar.php" method="GET">';
-                echo '<input type="hidden" name="nombre" value="' . $tarea->id . '">';
+                echo '<input type="hidden" name="id" value="' . $tarea->id . '">';
                 echo '<button type="submit">Editar</button>';
                 echo '</form>';
                 echo '</li>';
         }
 
 echo '</ul>';
+?>

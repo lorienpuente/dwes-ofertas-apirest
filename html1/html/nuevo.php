@@ -7,11 +7,7 @@
 </head>
 <body>
     <?php
-
-
 require_once  "nav.php";
-
-
 ?>
 <h1>Nueva tarea</h1>
     <form action="guardar.php" method="POST">
@@ -19,7 +15,7 @@ require_once  "nav.php";
         <input type="text" name="titulo" required>
         <label>Descripcion:</label>
         <input type="text" name="descripcion" required>
-        <button type="submit">Guardar</button>
+        <button type="submit">Crear</button>
     </form>
 </body>
 </html>
