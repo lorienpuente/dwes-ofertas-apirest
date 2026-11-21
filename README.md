@@ -58,7 +58,6 @@ Repositorio con las actividades de PHP y bases de datos.
 
 ### Archivos principales
 
-- [.gitignore](html1/html/.gitignore)
 - [.htaccess](html1/html/.htaccess)
 - [borrar.php](html1/html/borrar.php)
 - [editar.php](html1/html/editar.php)
