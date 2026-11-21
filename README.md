@@ -39,3 +39,32 @@ Repositorio con las actividades de PHP y bases de datos.
 - [prendas.php](examenanterior/prendas.php)
 - [talla.php](examenanterior/talla.php)
 - [tipoprenda.php](examenanterior/tipoprenda.php)
+
+## 📁 Contenido de la carpeta HTML
+
+- 📂 **[api](html1/html/api)**
+  - [index.php](html1/html/api/index.php)
+
+- 📂 **[dao](html1/html/dao)**
+  - [DAOFactory.php](html1/html/dao/DAOFactory.php)
+  - [DAOTareas.php](html1/html/dao/DAOTareas.php)
+  - [DAOTareasMySQL.php](html1/html/dao/DAOTareasMySQL.php)
+
+- 📂 **[db](html1/html/db)**
+  - [Database.php](html1/html/db/Database.php)
+
+- 📂 **[entities](html1/html/entities)**
+  - [Tarea.php](html1/html/entities/Tarea.php)
+
+### Archivos principales
+
+- [.gitignore](html1/html/.gitignore)
+- [.htaccess](html1/html/.htaccess)
+- [borrar.php](html1/html/borrar.php)
+- [editar.php](html1/html/editar.php)
+- [guardar.php](html1/html/guardar.php)
+- [index.php](html1/html/index.php)
+- [nav.php](html1/html/nav.php)
+- [nuevo.php](html1/html/nuevo.php)
+- [esquemas.sql](html1/html/esquemas.sql)
+- [update.php](html1/html/update.php)
