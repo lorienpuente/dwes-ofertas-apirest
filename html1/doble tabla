@@ -1,0 +1,351 @@
+1. squemas.sql (primero la tabla padre)
+
+sql
+CREATE TABLE categorias (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100)
+);
+
+CREATE TABLE tareas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    titulo VARCHAR(255),
+    descripcion VARCHAR(500),
+    categoria_id INT,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE CASCADE
+);
+
+Hay que crear antes alguna categoría para poder probar, porque una tarea no se puede insertar con una categoria_id que no exista.
+
+2. entities/Categoria.php (nuevo)
+
+php
+<?php
+
+class Categoria
+{
+    public ?int $id;
+    public string $nombre;
+
+    public function __construct(?int $id, string $nombre)
+    {
+        $this->id = $id;
+        $this->nombre = $nombre;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            "id" => $this->id,
+            "nombre" => $this->nombre
+        ];
+    }
+}
+
+3. entities/Tarea.php (añades categoria_id)
+
+php
+public ?int $id;
+public string $titulo;
+public ?string $descripcion;
+public int $categoria_id;
+
+public function __construct(?int $id, string $titulo, ?string $descripcion, int $categoria_id)
+{
+    $this->id = $id;
+    $this->titulo = $titulo;
+    $this->descripcion = $descripcion;
+    $this->categoria_id = $categoria_id;
+}
+
+public function toArray(): array
+{
+    return [
+        "id" => $this->id,
+        "titulo" => $this->titulo,
+        "descripcion" => $this->descripcion,
+        "categoria_id" => $this->categoria_id
+    ];
+}
+
+4. dao/DAOCategorias.php (nuevo, interfaz)
+
+php
+<?php
+
+require_once __DIR__ . "/../entities/Categoria.php";
+
+interface DAOCategorias
+{
+    public function obtenerTodas(): array;
+    public function obtenerPorId(int $id): ?Categoria;
+    public function crear(Categoria $categoria): Categoria;
+    public function actualizar(int $id, Categoria $categoria): ?Categoria;
+    public function eliminar(int $id): bool;
+}
+
+5. dao/DAOCategoriasMySQL.php (nuevo)
+
+php
+<?php
+
+require_once __DIR__ . "/DAOCategorias.php";
+require_once __DIR__ . "/../entities/Categoria.php";
+
+class DAOCategoriasMySQL implements DAOCategorias
+{
+    private PDO $db;
+
+    public function __construct(PDO $db)
+    {
+        $this->db = $db;
+    }
+
+    public function obtenerTodas(): array
+    {
+        $statement = $this->db->query("SELECT id, nombre FROM categorias ORDER BY id ASC");
+        return array_map([$this, "crearCategoriaDesdeFila"], $statement->fetchAll());
+    }
+
+    public function obtenerPorId(int $id): ?Categoria
+    {
+        $statement = $this->db->prepare("SELECT id, nombre FROM categorias WHERE id = :id");
+        $statement->execute(["id" => $id]);
+        $row = $statement->fetch();
+
+        return $row === false ? null : $this->crearCategoriaDesdeFila($row);
+    }
+
+    public function crear(Categoria $categoria): Categoria
+    {
+        $statement = $this->db->prepare("INSERT INTO categorias (nombre) VALUES (:nombre)");
+        $statement->execute(["nombre" => $categoria->nombre]);
+
+        return $this->obtenerPorId((int) $this->db->lastInsertId());
+    }
+
+    public function actualizar(int $id, Categoria $categoria): ?Categoria
+    {
+        $statement = $this->db->prepare("UPDATE categorias SET nombre = :nombre WHERE id = :id");
+        $statement->execute([
+            "nombre" => $categoria->nombre,
+            "id" => $id
+        ]);
+
+        return $this->obtenerPorId($id);
+    }
+
+    public function eliminar(int $id): bool
+    {
+        $statement = $this->db->prepare("DELETE FROM categorias WHERE id = :id");
+        $statement->execute(["id" => $id]);
+
+        return $statement->rowCount() > 0;
+    }
+
+    private function crearCategoriaDesdeFila(array $row): Categoria
+    {
+        return new Categoria((int) $row["id"], $row["nombre"]);
+    }
+}
+
+6. dao/DAOTareasMySQL.php (cambian las consultas y crearTareaDesdeFila; el resto del archivo igual)
+
+php
+// obtenerTodas
+$statement = $this->db->query("SELECT id, titulo, descripcion, categoria_id FROM tareas ORDER BY id ASC");
+
+// obtenerPorId
+$statement = $this->db->prepare("SELECT id, titulo, descripcion, categoria_id FROM tareas WHERE id = :id");
+
+// crear
+$statement = $this->db->prepare(
+    "INSERT INTO tareas (titulo, descripcion, categoria_id) VALUES (:titulo, :descripcion, :categoria_id)"
+);
+$statement->execute([
+    "titulo" => $tarea->titulo,
+    "descripcion" => $tarea->descripcion,
+    "categoria_id" => $tarea->categoria_id
+]);
+
+// actualizar
+$statement = $this->db->prepare(
+    "UPDATE tareas SET titulo = :titulo, descripcion = :descripcion, categoria_id = :categoria_id WHERE id = :id"
+);
+$statement->execute([
+    "titulo" => $tarea->titulo,
+    "descripcion" => $tarea->descripcion,
+    "categoria_id" => $tarea->categoria_id,
+    "id" => $id
+]);
+
+// crearTareaDesdeFila
+return new Tarea((int) $row["id"], $row["titulo"], $row["descripcion"], (int) $row["categoria_id"]);
+
+7. dao/DAOFactory.php
+
+php
+<?php
+
+require_once __DIR__ . "/../db/Database.php";
+require_once __DIR__ . "/DAOTareasMySQL.php";
+require_once __DIR__ . "/DAOCategoriasMySQL.php";
+
+class DAOFactory
+{
+    public static function getDAOTareas(): DAOTareas
+    {
+        return new DAOTareasMySQL((new Database())->getConnection());
+    }
+
+    public static function getDAOCategorias(): DAOCategorias
+    {
+        return new DAOCategoriasMySQL((new Database())->getConnection());
+    }
+}
+
+8. api/index.php (tareas): solo cambia leerTarea()
+
+php
+function leerTarea(): Tarea
+{
+    $datos = json_decode(file_get_contents("php://input"));
+    $titulo = $datos->titulo ?? null;
+    $descripcion = $datos->descripcion ?? null;
+    $categoria_id = $datos->categoria_id ?? null;
+    return new Tarea(null, $titulo, $descripcion, $categoria_id);
+}
+
+El resto del archivo queda igual. Ahora el POST/PUT llevan {"titulo": "...", "descripcion": "...", "categoria_id": 1}.
+
+9. api/categorias/index.php (nuevo, copia de tu api con otro DAO)
+
+php
+<?php
+
+require_once __DIR__ . "/../../dao/DAOFactory.php";
+require_once __DIR__ . "/../../entities/Categoria.php";
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Allow: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+header("Content-Type: application/json; charset=UTF-8");
+
+function leerCategoria(): Categoria
+{
+    $datos = json_decode(file_get_contents("php://input"));
+    $nombre = $datos->nombre ?? null;
+    return new Categoria(null, $nombre);
+}
+
+$metodo = $_SERVER["REQUEST_METHOD"];
+$id = $_GET["id"] ?? null;
+
+try {
+    $dao = DAOFactory::getDAOCategorias();
+
+    switch ($metodo) {
+        case "GET":
+            if ($id === null) {
+                echo json_encode($dao->obtenerTodas());
+                break;
+            }
+            echo json_encode($dao->obtenerPorId($id));
+            break;
+
+        case "POST":
+            echo json_encode($dao->crear(leerCategoria()));
+            break;
+
+        case "PUT":
+            echo json_encode($dao->actualizar($id, leerCategoria()));
+            break;
+
+        case "DELETE":
+            echo $dao->eliminar($id);
+            break;
+    }
+} catch (PDOException $exception) {
+    error_log($exception->getMessage());
+}
+
+La URL es /api/categorias/ o /api/categorias/?id=1. Si tu .htaccess de api/ reescribe /api/5 a ?id=5, aquí usa ?id= para no depender de él.
+
+10. SSR
+
+index.php: añades el DAO de categorías y muestras el nombre de cada tarea:
+
+php
+$dao = DAOFactory::getDAOTareas();
+$daoCategorias = DAOFactory::getDAOCategorias();
+$tareas = $dao->obtenerTodas();
+
+// dentro del foreach, junto a los otros <p>:
+echo '<p>' . $daoCategorias->obtenerPorId($tarea->categoria_id)->nombre . '</p>';
+
+nuevo.php: cargas las categorías y añades el select:
+
+php
+<?php
+require_once  "nav.php";
+require_once __DIR__ . "/dao/DAOFactory.php";
+$daoCategorias = DAOFactory::getDAOCategorias();
+$categorias = $daoCategorias->obtenerTodas();
+?>
+<h1>Nueva tarea</h1>
+    <form action="guardar.php" method="POST">
+        <label>Titulo:</label>
+        <input type="text" name="titulo" required>
+        <label>Descripcion:</label>
+        <input type="text" name="descripcion" required>
+        <label>Categoria:</label>
+        <select name="categoria_id" required>
+            <?php foreach ($categorias as $categoria) { ?>
+                <option value="<?php echo $categoria->id ?>"><?php echo $categoria->nombre ?></option>
+            <?php } ?>
+        </select>
+        <button type="submit">Crear</button>
+    </form>
+
+guardar.php:
+
+php
+$titulo = $_POST['titulo'];
+$descripcion = $_POST['descripcion'];
+$categoria_id = (int)$_POST['categoria_id'];
+$tarea = new Tarea(null, $titulo, $descripcion, $categoria_id);
+$nuevo = $dao->crear($tarea);
+
+editar.php: igual que lo que hicimos antes, con el select marcando la categoría actual:
+
+php
+$daoCategorias = DAOFactory::getDAOCategorias();
+$categorias = $daoCategorias->obtenerTodas();
+
+// en el formulario, tras la descripcion:
+<label>Categoria:</label>
+<select name="categoria_id" required>
+    <?php foreach ($categorias as $categoria) { ?>
+        <option value="<?php echo $categoria->id ?>" <?php if ($categoria->id == $tarea->categoria_id) echo 'selected' ?>>
+            <?php echo $categoria->nombre ?>
+        </option>
+    <?php } ?>
+</select>
+
+update.php:
+
+php
+$id = (int)$_GET['id'];
+$titulo = $_GET['titulo'];
+$descripcion = $_GET['descripcion'];
+$categoria_id = (int)$_GET['categoria_id'];
+$tarea = new Tarea($id, $titulo, $descripcion, $categoria_id);
+$editar = $dao->actualizar($id, $tarea);
+
+borrar.php y nav.php no cambian.
+
+Cosas a tener en cuenta:
+
+Si el enunciado pide también CRUD de categorías en el SSR, copia index.php, nuevo.php, guardar.php, editar.php, update.php y borrar.php con otro nombre (por ejemplo categorias_index.php) usando DAOCategorias y solo el campo nombre.
+Con ON DELETE CASCADE, al borrar una categoría se borran sus tareas. Si el enunciado dice que no se puede borrar una categoría con tareas, quita el ON DELETE CASCADE y MySQL lanzará un error al intentarlo.
+Dejé nav.php en guardar.php, update.php y borrar.php como lo tienes. Si te da el aviso de headers already sent al redirigir, ese require_once "nav.php" es lo que hay que quitar de esos tres.
