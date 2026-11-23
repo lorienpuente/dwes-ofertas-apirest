@@ -58,4 +58,9 @@
 ### Archivos principales
 
 - [LorienApplication.java](https://github.com/lorienpuente/dwes-ofertas/blob/master/src/main/java/com/cpifppiramide/lorien/LorienApplication.java)
-- [esquemas.sql](https://github.com/lorienpuente/dwes-ofertas/blob/master/src/main/java/com/cpifppiramide/lorien/esquemas.sql)
+- [esquemas.sql](https://github.com/lorienpuente/dwes-ofertas/blob/master/src/main/java/com/cpifppiramide/lorien/squemas.sql)
+
+#### Dependencias springboot
+- Spring web
+- Thymeleaf
+- Mysql
