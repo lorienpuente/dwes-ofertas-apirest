@@ -1,5 +1,5 @@
 
-## 📁 Contenido de la carpeta HTML
+## 📁 Contenido de la carpeta HTML - PHP
 
 - 📂 **[api](html1/html/api)**
   - [index.php](html1/html/api/index.php)
@@ -31,7 +31,7 @@
 - [Cambios si hay dos tablas](html1/doble_tabla)
 
 
-  ## 📁 Contenido del proyecto DWES Ofertas
+  ## 📁 Contenido del proyecto DWES Ofertas - JAVA
 
 - 📂 [**dao**](https://github.com/lorienpuente/dwes-ofertas/tree/master/src/main/java/com/cpifppiramide/lorien/dao)
 
