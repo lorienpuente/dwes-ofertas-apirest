@@ -68,6 +68,9 @@ Repositorio con las actividades de PHP y bases de datos.
 - [esquemas.sql](html1/html/esquemas.sql)
 - [update.php](html1/html/update.php)
 
+  ### Dos tablas cambios
+  - [Cambios si hay doble tabla](html1/doble tabla)
+
 
   ## 📁 Contenido del proyecto DWES Ofertas
 
