@@ -24,7 +24,7 @@
 - [index.php](html1/html/index.php)
 - [nav.php](html1/html/nav.php)
 - [nuevo.php](html1/html/nuevo.php)
-- [esquemas.sql](html1/html/esquemas.sql)
+- [esquemas.sql](html1/html/squemas.sql)
 - [update.php](html1/html/update.php)
 
   ### Dos tablas cambios
