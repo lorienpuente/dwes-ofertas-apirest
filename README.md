@@ -69,7 +69,7 @@ Repositorio con las actividades de PHP y bases de datos.
 - [update.php](html1/html/update.php)
 
   ### Dos tablas cambios
-  - [Cambios si hay doble tabla](html1/doble tabla)
+- [Cambios si hay dos tablas](html1/doble_tabla)
 
 
   ## 📁 Contenido del proyecto DWES Ofertas
